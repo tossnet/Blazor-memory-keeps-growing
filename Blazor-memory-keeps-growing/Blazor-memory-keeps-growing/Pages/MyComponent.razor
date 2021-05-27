@@ -1,0 +1,47 @@
+﻿<div class="d-flex flex-wrap myContener"  ondragover="event.preventDefault();" ondragleave="event.stopPropagation();">
+	@for (int i = 0; i < Cells; i++)
+	{
+		var id = i;
+		<div class="cellBoard centertext" 
+				@ondrop="() => HandleOnDrop(id)" >
+			
+			@foreach(Piece p in Pieces)
+			{
+				if (p.IDCell == i)
+				{
+					<div class="dot" style="@($"background-Color:{p.Color}")"
+						draggable="true" 
+						@ondrag="() => HandleDragStart(p.ID)">
+		  
+					</div>
+					break;
+				}
+			}
+		</div>
+	}
+</div>
+
+
+@code {
+	[Parameter] public List<Piece> Pieces { get; set; }
+    [Parameter] public EventCallback<LinkParameter> DropPieceCell { get; set; }
+
+	private int Cells = 500;
+	private int currentIDPiece = 0;
+
+	private void HandleDragStart(int idPiece)
+	{
+		currentIDPiece = idPiece;
+    }
+
+	private async Task HandleOnDrop(int iDCell)
+    {
+        var param = new LinkParameter()
+        {
+            IDPiece = currentIDPiece,
+			IDCell = iDCell
+        };
+
+        await DropPieceCell.InvokeAsync(param);
+    }
+}

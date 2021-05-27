@@ -1,7 +1,37 @@
 ﻿@page "/"
 
+
 <h1>Hello, world!</h1>
 
-Welcome to your new app.
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+
+<MyComponent Pieces="Pieces" DropPieceCell="DropPieceCell"></MyComponent>
+
+@code{
+	private List<Piece> Pieces { get; set; }
+
+	protected override void OnInitialized()
+	{
+		Pieces = new()
+		{
+			new Piece() { ID = 1, IDCell = 42, Color = "Cyan" },
+			new Piece() { ID = 2, IDCell = 73, Color = "Yellow" },
+			new Piece() { ID = 3, IDCell = 9, Color = "Violet" },
+			new Piece() { ID = 4, IDCell = 8, Color = "Green" },
+			new Piece() { ID = 5, IDCell = 48, Color = "Red" },
+			new Piece() { ID = 6, IDCell = 13, Color = "Brown" },
+			new Piece() { ID = 7, IDCell = 7, Color = "LightGreen" },
+			new Piece() { ID = 8, IDCell = 88, Color = "Pink" },
+			new Piece() { ID = 9, IDCell = 16, Color = "Grey" },
+			new Piece() { ID = 10, IDCell = 10, Color = "Black" }
+		};
+	}
+
+	private void DropPieceCell(LinkParameter linkParameter)
+	{
+		var pieceMoved = Pieces.First(p => p.ID == linkParameter.IDPiece);
+
+		pieceMoved.IDCell = linkParameter.IDCell;
+        StateHasChanged();
+	}
+}
